@@ -17,21 +17,18 @@ jobs:
     - env:
         GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
       run: |
-        set -x 
-        
         now=$(printf `date +"%Y-%m-%dT%H:%M:%S%:z"`)
-        echo "now: $now"
 
         gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
 
-        sleep 5        
-        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json workflowDatabaseId | jq -r '.[0].workflowDatabaseId')
-        if [ "$num" = "null" ]; then
+        sleep 5
+        url=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json url | jq -r '.[0].url')
+        if [ "$url" = "null" ]; then
           echo "No run found"
           exit 1
         fi
-        echo "num: $num"
-        echo "Workflow link: https://github.com/imjasonh/workflow-private/actions/runs/${num}"
+        echo "Workflow link: ${url}"
+        
         while true; do
           status=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json status | jq -r '.[0].status')
           echo "status: $status"
