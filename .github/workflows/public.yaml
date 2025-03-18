@@ -33,7 +33,7 @@ jobs:
         echo "num: $num"
         while true; do
           gh run list --repo imjasonh/workflow-private -w private.yaml
-          gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status | jq --arg num "$num" -r '.[] | select(.number == $num) | .status') # TODO
+          gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status | jq --arg num "$num" -r '.[] | select(.number == $num) | .status' # TODO
         
           status=$(gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status | jq --arg num "$num" -r '.[] | select(.number == $num) | .status')
           echo "status: $status"
