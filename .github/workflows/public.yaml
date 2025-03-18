@@ -47,3 +47,8 @@ jobs:
           fi
           sleep 5
         done
+
+        # Get my own logs
+        set -x
+        gh api /repos/imjasonh/workflow-public/actions/runs/${{github.run_id}}/attempts/${{github.run_attempt}}/logs
+
