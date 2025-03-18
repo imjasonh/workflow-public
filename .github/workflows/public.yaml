@@ -1,6 +1,6 @@
 on:
   workflow_dispatch:
-  push:
+  pull:
     branches: ['main']
 
 jobs:
@@ -18,11 +18,13 @@ jobs:
         GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
       run: |
         now=$(date +"%Y-%m-%dT%H:%M:%S%:z")
+        echo "now: $now"
+
         gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
 
-        gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">${now}" # TODO remove
-
-        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">${now}" --json number | jq '.[0].number')
+        gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}"
+        
+        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json number | jq '.[0].number')
         if [ "$num" = "null" ]; then
           echo "No run found"
           exit 1
