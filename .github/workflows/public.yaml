@@ -19,8 +19,10 @@ jobs:
         gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
 
         num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">${now}" --json number --jq '.[0].number')
+        echo "num: $num"
         while true; do
-          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status --jq '.[] | select(.number == $num) | .status')
+          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status | jq --arg num "$num" -r '.[] | select(.number == $num) | .status')
+          echo "status: $status"
           if [ "$status" = "completed" ]; then
             break
           fi
