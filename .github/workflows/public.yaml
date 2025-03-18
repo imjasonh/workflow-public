@@ -32,12 +32,9 @@ jobs:
         fi
         echo "num: $num"
         while true; do
-          gh run list --repo imjasonh/workflow-private -w private.yaml
-          gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status | jq --arg num "$num" -r '.[] | select(.number == $num) | .status' # TODO
-        
-          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status | jq --arg num "$num" -r '.[] | select(.number == $num) | .status')
+          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json status | jq -r '.[0].status') .status')
           echo "status: $status"
-          if [ "$status" = "" ]; then
+          if [ "$status" = "null" ]; then
             echo "Status not found"
             exit 1
           fi
