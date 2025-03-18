@@ -16,3 +16,10 @@ jobs:
         GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
       run: |
         gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
+
+        # HACK: watch any recent ongoing runs, and fail if any of those fail.
+        gh run watch -R imjasonh/workflow-private --exit-status
+
+        # LESS HACKY: list recent runs of private.yaml, get their number, and watch just those runs
+        #num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --json number --jq '.[].number')
+        #gh run watch --repo imjasonh/workflow-private --exit-status ${num}
