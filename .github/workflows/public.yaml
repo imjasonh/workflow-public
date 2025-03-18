@@ -7,7 +7,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: octo-sts/action
+    - uses: octo-sts/action@v1.0.0
       id: octo-sts
       with:
         scope: imjasonh/workflow-private
