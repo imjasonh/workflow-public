@@ -15,4 +15,4 @@ jobs:
     - env:
         GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
       run: |
-        gh workflow run -R imjasonh/workflow-private private.yaml
+        gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
