@@ -25,14 +25,15 @@ jobs:
         gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
 
         sleep 5        
-        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json number | jq '.[0].number')
+        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json number | jq -r '.[0].workflowDatabaseId')
         if [ "$num" = "null" ]; then
           echo "No run found"
           exit 1
         fi
         echo "num: $num"
+        echo "Workflow link: https://github.com/imjasonh/workflow-private/actions/runs/${num}"
         while true; do
-          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json status | jq -r '.[0].status') .status')
+          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">=${now}" --json status | jq -r '.[0].status')
           echo "status: $status"
           if [ "$status" = "null" ]; then
             echo "Status not found"
