@@ -15,7 +15,14 @@ jobs:
     - env:
         GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
       run: |
+        now=$(date +"%Y-%m-%dT%H:%M:%S%:z")
         gh workflow run --repo imjasonh/workflow-private private.yaml --ref main
 
-        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --json number --jq '.[0].number')
-        gh run watch --repo imjasonh/workflow-private --exit-status ${num}
+        num=$(gh run list --repo imjasonh/workflow-private -w private.yaml -e workflow_dispatch --created ">${now}" --json number --jq '.[0].number')
+        while true; do
+          status=$(gh run list --repo imjasonh/workflow-private -w private.yaml --json number,status --jq '.[] | select(.number == $num) | .status')
+          if [ "$status" = "completed" ]; then
+            break
+          fi
+          sleep 5
+        done
