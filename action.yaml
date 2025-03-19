@@ -8,4 +8,4 @@ runs:
   steps:
   - shell: bash
     run: |
-      echo hi
+      echo uh oh bad sdtuff
