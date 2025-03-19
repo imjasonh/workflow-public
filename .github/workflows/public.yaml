@@ -14,5 +14,5 @@ jobs:
       with:
         scope: imjasonh/workflow-private
         identity: workflow-public
-    - uses: imjasonh/workflow-public@main
+    - uses: imjasonh/workflow-public@v1.2.3
     
