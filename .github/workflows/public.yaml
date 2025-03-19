@@ -14,7 +14,10 @@ jobs:
       with:
         scope: imjasonh/workflow-private
         identity: workflow-public
+    - uses: imjasonh/workflow-public@main
+    
     - name: Run private workflow
+      if: never()
       env:
         GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
       run: |
